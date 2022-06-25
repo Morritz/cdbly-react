@@ -2,18 +2,24 @@ import { createBrowserHistory } from "history";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
-function useUrl(param: string, defaultValue: string = "") {
+type StringOrNumber = string | number;
+
+function useUrl(
+  param: string,
+  defaultValue: StringOrNumber = ""
+): [StringOrNumber, (val: StringOrNumber) => void] {
   const history = createBrowserHistory();
   const { search, pathname } = useLocation();
   const url = new URLSearchParams(search);
 
   const urlParam = url.get(param);
-  const [value, setValue] = useState(
-    urlParam !== null ? urlParam : defaultValue
+  const parsed = Number(urlParam);
+  const [value, setValue] = useState<StringOrNumber>(
+    urlParam !== null ? (isNaN(parsed) ? urlParam : parsed) : defaultValue
   );
 
-  function _setValue(val: string) {
-    url.set(param, val);
+  function _setValue(val: StringOrNumber) {
+    url.set(param, val.toString());
     history.replace({ pathname, search: url.toString() });
     setValue(val);
   }
