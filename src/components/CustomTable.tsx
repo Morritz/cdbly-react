@@ -4,7 +4,10 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHead,
+  TablePagination,
+  TableRow,
 } from "@mui/material";
 import { TableHeadCell } from "./TableHeadCell";
 
@@ -13,15 +16,32 @@ const CustomTable = () => {
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
-          <TableHeadCell>id</TableHeadCell>
-          <TableHeadCell>name</TableHeadCell>
-          <TableHeadCell>year</TableHeadCell>
+          <TableRow>
+            <TableHeadCell>id</TableHeadCell>
+            <TableHeadCell>name</TableHeadCell>
+            <TableHeadCell>year</TableHeadCell>
+          </TableRow>
         </TableHead>
         <TableBody>
-          <TableCell>id</TableCell>
-          <TableCell>name</TableCell>
-          <TableCell>year</TableCell>
+          <TableRow>
+            <TableCell>id</TableCell>
+            <TableCell>name</TableCell>
+            <TableCell>year</TableCell>
+          </TableRow>
         </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TablePagination
+              count={0}
+              page={0}
+              onPageChange={() => {
+                return;
+              }}
+              rowsPerPageOptions={[-1]}
+              rowsPerPage={5}
+            />
+          </TableRow>
+        </TableFooter>
       </Table>
     </TableContainer>
   );
