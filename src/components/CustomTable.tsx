@@ -52,41 +52,40 @@ const CustomTable = () => {
     }
   }, [data]);
 
-  if (!data)
+  const renderTableBody = () => {
+    if (data && "data" in data)
+      return ensureArray(data.data).map((item) => {
+        return (
+          <TableRow
+            sx={{
+              backgroundColor: item.color,
+            }}
+            key={item.id}
+          >
+            <TableCell>{item.id}</TableCell>
+            <TableCell>{item.name}</TableCell>
+            <TableCell>{item.year}</TableCell>
+          </TableRow>
+        );
+      });
     return (
-      <Stack alignItems="center">
-        <CircularProgress />
-      </Stack>
+      <TableRow>
+        <TableCell colSpan={3}>
+          {error ? (
+            <InfoCard />
+          ) : (
+            <Stack alignItems="center">
+              <CircularProgress />
+            </Stack>
+          )}
+        </TableCell>
+      </TableRow>
     );
-  if (error) return <InfoCard />;
+  };
 
-  return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableHeadCell>id</TableHeadCell>
-          <TableHeadCell>name</TableHeadCell>
-          <TableHeadCell>year</TableHeadCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {"data" in data &&
-          ensureArray(data.data).map((item) => {
-            return (
-              <TableRow
-                sx={{
-                  backgroundColor: item.color,
-                }}
-                key={item.id}
-              >
-                <TableCell>{item.id}</TableCell>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>{item.year}</TableCell>
-              </TableRow>
-            );
-          })}
-      </TableBody>
-      {"page" in data && (
+  const renderTableFooter = () => {
+    if (data && "page" in data)
+      return (
         <TableFooter>
           <TableRow>
             <TablePagination
@@ -98,7 +97,20 @@ const CustomTable = () => {
             />
           </TableRow>
         </TableFooter>
-      )}
+      );
+  };
+
+  return (
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableHeadCell>id</TableHeadCell>
+          <TableHeadCell>name</TableHeadCell>
+          <TableHeadCell>year</TableHeadCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>{renderTableBody()}</TableBody>
+      {renderTableFooter()}
     </Table>
   );
 };
