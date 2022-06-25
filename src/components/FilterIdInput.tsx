@@ -9,7 +9,7 @@ const FilterIdInput = () => {
   return (
     <TextField
       label="Search by id"
-      value={idInput}
+      value={idInput || ""}
       inputProps={{
         inputMode: "numeric",
         pattern: "^$|^[0-9]*$",
