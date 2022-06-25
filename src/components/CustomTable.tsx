@@ -1,4 +1,5 @@
 import {
+  CircularProgress,
   Paper,
   Table,
   TableBody,
@@ -18,16 +19,24 @@ import { IApiResponse } from "../interfaces/ApiResponse";
 import { useEffect } from "react";
 import { InfoCard } from "./InfoCard";
 import { FilterIdInput } from "./FilterIdInput";
+import { useTableStore } from "../stores/tableStore";
+import { IApiResponseById } from "../interfaces/ApiResponseById";
+import { ensureArray } from "../utils/ensureArray";
 
 const API_URL = "https://reqres.in/api/products";
 const ITEMS_PER_PAGE = 5;
 
 const CustomTable = () => {
   const [page, setPage] = useUrl("page", 1);
-  const { data, error } = useSWR<IApiResponse>(
-    `${API_URL}?per_page=${ITEMS_PER_PAGE}&page=${page}`,
-    fetcher
-  );
+  const idInput = useTableStore((state) => state.idInput);
+
+  const { data, error } =
+    idInput != 0
+      ? useSWR<IApiResponseById>(`${API_URL}?id=${idInput}`, fetcher)
+      : useSWR<IApiResponse>(
+          `${API_URL}?per_page=${ITEMS_PER_PAGE}&page=${page}`,
+          fetcher
+        );
 
   const handlePageChange = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -37,7 +46,7 @@ const CustomTable = () => {
   };
 
   useEffect(() => {
-    if (data) {
+    if (data && "total_pages" in data) {
       const totalPages = data.total_pages;
       if (page > totalPages) {
         setPage(totalPages);
@@ -45,20 +54,23 @@ const CustomTable = () => {
     }
   }, [data]);
 
-  if (data)
-    return (
-      <TableContainer component={Paper}>
-        <FilterIdInput />
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableHeadCell>id</TableHeadCell>
-              <TableHeadCell>name</TableHeadCell>
-              <TableHeadCell>year</TableHeadCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.data.map((item) => {
+  if (!data) return <CircularProgress />;
+  if (error) return <InfoCard />;
+
+  return (
+    <TableContainer component={Paper}>
+      <FilterIdInput />
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableHeadCell>id</TableHeadCell>
+            <TableHeadCell>name</TableHeadCell>
+            <TableHeadCell>year</TableHeadCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {"data" in data &&
+            ensureArray(data.data).map((item) => {
               return (
                 <TableRow
                   sx={{
@@ -72,7 +84,8 @@ const CustomTable = () => {
                 </TableRow>
               );
             })}
-          </TableBody>
+        </TableBody>
+        {"page" in data && (
           <TableFooter>
             <TableRow>
               <TablePagination
@@ -84,11 +97,10 @@ const CustomTable = () => {
               />
             </TableRow>
           </TableFooter>
-        </Table>
-      </TableContainer>
-    );
-
-  if (error) return <InfoCard />;
+        )}
+      </Table>
+    </TableContainer>
+  );
 };
 
 export { CustomTable };
