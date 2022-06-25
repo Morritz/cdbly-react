@@ -16,8 +16,10 @@ import { fetcher } from "../utils/fetcher";
 import { useUrl } from "../utils/hooks/useUrl";
 import { IApiResponse } from "../interfaces/ApiResponse";
 import { useEffect } from "react";
+import { InfoCard } from "./InfoCard";
+import { FilterIdInput } from "./FilterIdInput";
 
-const API_URL = "https://reqreds.in/api/products";
+const API_URL = "https://reqres.in/api/products";
 const ITEMS_PER_PAGE = 5;
 
 const CustomTable = () => {
@@ -46,6 +48,7 @@ const CustomTable = () => {
   if (data)
     return (
       <TableContainer component={Paper}>
+        <FilterIdInput />
         <Table>
           <TableHead>
             <TableRow>
@@ -84,6 +87,8 @@ const CustomTable = () => {
         </Table>
       </TableContainer>
     );
+
+  if (error) return <InfoCard />;
 };
 
 export { CustomTable };
