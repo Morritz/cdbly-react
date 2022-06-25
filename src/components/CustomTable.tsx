@@ -13,7 +13,6 @@ import { TableHeadCell } from "./TableHeadCell";
 
 import useSWR from "swr";
 import { fetcher } from "../utils/fetcher";
-import { useUrl } from "../utils/hooks/useUrl";
 import { IApiResponse } from "../interfaces/ApiResponse";
 import { useEffect } from "react";
 import { InfoCard } from "./InfoCard";
