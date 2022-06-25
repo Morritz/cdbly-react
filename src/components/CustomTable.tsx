@@ -17,22 +17,20 @@ import { useUrl } from "../utils/hooks/useUrl";
 import { IApiResponse } from "../interfaces/ApiResponse";
 import { useEffect } from "react";
 import { InfoCard } from "./InfoCard";
-import { useTableStore } from "../stores/tableStore";
 import { IApiResponseById } from "../interfaces/ApiResponseById";
 import { ensureArray } from "../utils/ensureArray";
+import { useQuery } from "../stores/queryStore";
 
 const API_URL = "https://reqres.in/api/products";
 const ITEMS_PER_PAGE = 5;
 
 const CustomTable = () => {
-  const [page, setPage] = useUrl("page", 1);
-  const idInput = useTableStore((state) => state.idInput);
-
+  const { values, replaceState } = useQuery();
   const { data, error } =
-    idInput != 0
-      ? useSWR<IApiResponseById>(`${API_URL}?id=${idInput}`, fetcher)
+    values.id != 0
+      ? useSWR<IApiResponseById>(`${API_URL}?id=${values.id}`, fetcher)
       : useSWR<IApiResponse>(
-          `${API_URL}?per_page=${ITEMS_PER_PAGE}&page=${page}`,
+          `${API_URL}?per_page=${ITEMS_PER_PAGE}&page=${values.page}`,
           fetcher
         );
 
@@ -40,14 +38,14 @@ const CustomTable = () => {
     event: React.MouseEvent<HTMLButtonElement> | null,
     page: number
   ) => {
-    setPage(page + 1);
+    replaceState((values) => void (values.page = page + 1));
   };
 
   useEffect(() => {
     if (data && "total_pages" in data) {
       const totalPages = data.total_pages;
-      if (page > totalPages) {
-        setPage(totalPages);
+      if (values.page > totalPages) {
+        replaceState((values) => void (values.page = totalPages));
       }
     }
   }, [data]);

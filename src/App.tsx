@@ -8,6 +8,9 @@ import { Container } from "@mui/system";
 import { useMemo } from "react";
 import { CustomTableWrapper } from "./components/CustomTableWrapper";
 
+import GeschichteForHistory from "geschichte/historyjs";
+import { createBrowserHistory } from "history";
+
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
@@ -21,12 +24,14 @@ function App() {
     [prefersDarkMode]
   );
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Container sx={{ padding: 4 }}>
-        <CustomTableWrapper />
-      </Container>
-    </ThemeProvider>
+    <GeschichteForHistory history={createBrowserHistory()}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Container sx={{ padding: 4 }}>
+          <CustomTableWrapper />
+        </Container>
+      </ThemeProvider>
+    </GeschichteForHistory>
   );
 }
 

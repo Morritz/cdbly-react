@@ -1,23 +1,22 @@
 import { Stack, TextField } from "@mui/material";
-import { useTableStore } from "../stores/tableStore";
+import { useQuery } from "../stores/queryStore";
 
 const FilterIdInput = () => {
-  const [idInput, setIdInput] = useTableStore((state) => [
-    state.idInput,
-    state.setIdInput,
-  ]);
+  const { values, replaceState } = useQuery();
   return (
     <Stack alignItems="center">
       <TextField
         label="Search by id"
-        value={idInput || ""}
+        value={values.id || ""}
         inputProps={{
           inputMode: "numeric",
           pattern: "^$|^[0-9]*$",
           min: 0,
           onInput: (e) => {
             if (e.currentTarget.validity.valid)
-              setIdInput(Number(e.currentTarget.value));
+              replaceState(
+                (values) => void (values.id = Number(e.currentTarget.value))
+              );
           },
         }}
         sx={{
