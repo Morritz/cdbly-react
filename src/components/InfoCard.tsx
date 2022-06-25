@@ -1,6 +1,8 @@
 import { Card } from "@mui/material";
-
-const InfoCard = () => {
+interface InfoCardProps {
+  message: string;
+}
+const InfoCard = ({ message }: InfoCardProps) => {
   return (
     <Card
       variant="elevation"
@@ -8,7 +10,7 @@ const InfoCard = () => {
         padding: 4,
       }}
     >
-      Failed to fetch the data.
+      {message}
     </Card>
   );
 };

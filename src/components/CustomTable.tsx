@@ -53,26 +53,36 @@ const CustomTable = () => {
   }, [data]);
 
   const renderTableBody = () => {
-    if (data && "data" in data)
-      return ensureArray(data.data).map((item) => {
+    if (data)
+      if ("data" in data) {
+        return ensureArray(data.data).map((item) => {
+          return (
+            <TableRow
+              sx={{
+                backgroundColor: item.color,
+              }}
+              key={item.id}
+            >
+              <TableCell>{item.id}</TableCell>
+              <TableCell>{item.name}</TableCell>
+              <TableCell>{item.year}</TableCell>
+            </TableRow>
+          );
+        });
+      } else {
         return (
-          <TableRow
-            sx={{
-              backgroundColor: item.color,
-            }}
-            key={item.id}
-          >
-            <TableCell>{item.id}</TableCell>
-            <TableCell>{item.name}</TableCell>
-            <TableCell>{item.year}</TableCell>
+          <TableRow>
+            <TableCell colSpan={3}>
+              <InfoCard message={"There are no results for your query."} />
+            </TableCell>
           </TableRow>
         );
-      });
+      }
     if (error)
       return (
         <TableRow>
           <TableCell colSpan={3}>
-            <InfoCard />
+            <InfoCard message={"Failed to fetch data."} />
           </TableCell>
         </TableRow>
       );

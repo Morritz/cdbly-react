@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { Stack, TextField } from "@mui/material";
 import { useTableStore } from "../stores/tableStore";
 
 const FilterIdInput = () => {
@@ -7,24 +7,25 @@ const FilterIdInput = () => {
     state.setIdInput,
   ]);
   return (
-    <TextField
-      label="Search by id"
-      value={idInput || ""}
-      inputProps={{
-        inputMode: "numeric",
-        pattern: "^$|^[0-9]*$",
-        min: 0,
-        onInput: (e) => {
-          if (e.currentTarget.validity.valid)
-            setIdInput(Number(e.currentTarget.value));
-        },
-      }}
-      fullWidth
-      margin="dense"
-      sx={{
-        marginY: 2,
-      }}
-    />
+    <Stack alignItems="center">
+      <TextField
+        label="Search by id"
+        value={idInput || ""}
+        inputProps={{
+          inputMode: "numeric",
+          pattern: "^$|^[0-9]*$",
+          min: 0,
+          onInput: (e) => {
+            if (e.currentTarget.validity.valid)
+              setIdInput(Number(e.currentTarget.value));
+          },
+        }}
+        sx={{
+          marginY: 2,
+          width: "95%",
+        }}
+      />
+    </Stack>
   );
 };
 
