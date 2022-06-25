@@ -6,8 +6,6 @@ import { describe, expect, test, vi } from "vitest";
 import { CustomTable } from "./CustomTable";
 import { InfoCard } from "./InfoCard";
 
-const flushPromises = () => new Promise(setImmediate);
-
 describe("Testing custom table", () => {
   test("infocard should render with passed message", () => {
     render(<InfoCard message={"Simple message"} />);
