@@ -68,19 +68,14 @@ const CustomTable = () => {
           </TableRow>
         );
       });
-    return (
-      <TableRow>
-        <TableCell colSpan={3}>
-          {error ? (
+    if (error)
+      return (
+        <TableRow>
+          <TableCell colSpan={3}>
             <InfoCard />
-          ) : (
-            <Stack alignItems="center">
-              <CircularProgress />
-            </Stack>
-          )}
-        </TableCell>
-      </TableRow>
-    );
+          </TableCell>
+        </TableRow>
+      );
   };
 
   const renderTableFooter = () => {
@@ -100,6 +95,12 @@ const CustomTable = () => {
       );
   };
 
+  if (!data)
+    return (
+      <Stack alignItems="center">
+        <CircularProgress />
+      </Stack>
+    );
   return (
     <Table>
       <TableHead>
