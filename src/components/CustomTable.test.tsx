@@ -14,7 +14,6 @@ describe("Testing custom table", () => {
     expect(screen.getByText(/Simple message/i)).toBeDefined();
   });
 
-  fetch;
   test("there should be failed to fetch message when the fetch fails", async () => {
     global.fetch = vi.fn().mockImplementationOnce(() =>
       Promise.resolve(
