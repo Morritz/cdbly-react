@@ -45,6 +45,7 @@ const CustomTable = () => {
                     sx={{
                       backgroundColor: item.color,
                     }}
+                    key={item.id}
                   >
                     <TableCell>{item.id}</TableCell>
                     <TableCell>{item.name}</TableCell>
