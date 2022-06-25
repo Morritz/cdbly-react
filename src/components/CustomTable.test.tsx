@@ -1,8 +1,7 @@
 import "@testing-library/jest-dom";
-import { describe, expect, test } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { describe, expect, test } from "vitest";
 import { InfoCard } from "./InfoCard";
-import { FilterIdInput } from "./FilterIdInput";
 
 describe("Testing custom table", () => {
   test("infocard should render with passed message", () => {

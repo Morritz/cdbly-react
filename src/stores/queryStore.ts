@@ -1,4 +1,4 @@
-import { pm, factoryParameters, serializers } from "geschichte";
+import { factoryParameters, pm, serializers } from "geschichte";
 
 const parameterConfig = {
   page: pm("page", serializers.int),
