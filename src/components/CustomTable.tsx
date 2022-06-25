@@ -11,7 +11,21 @@ import {
 } from "@mui/material";
 import { TableHeadCell } from "./TableHeadCell";
 
+import useSWR from "swr";
+import { fetcher } from "../utils/fetcher";
+import { useUrl } from "../utils/hooks/useUrl";
+
+const API_URL = "https://reqres.in/api/products";
+const ITEMS_PER_PAGE = 5;
+
 const CustomTable = () => {
+  const [page, setPage] = useUrl("page", "0");
+  const { data, error } = useSWR(
+    `${API_URL}?per_page=${ITEMS_PER_PAGE}&page=${page}`,
+    fetcher
+  );
+  console.log(data);
+
   return (
     <TableContainer component={Paper}>
       <Table>
