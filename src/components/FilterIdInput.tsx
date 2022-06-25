@@ -21,6 +21,9 @@ const FilterIdInput = () => {
       }}
       fullWidth
       margin="dense"
+      sx={{
+        marginY: 2,
+      }}
     />
   );
 };

@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { Container } from "@mui/system";
 import { useMemo } from "react";
-import { CustomTable } from "./components/CustomTable";
+import { CustomTableWrapper } from "./components/CustomTableWrapper";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -24,7 +24,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container sx={{ padding: 4 }}>
-        <CustomTable />
+        <CustomTableWrapper />
       </Container>
     </ThemeProvider>
   );

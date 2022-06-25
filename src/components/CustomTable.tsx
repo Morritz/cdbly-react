@@ -1,10 +1,9 @@
 import {
   CircularProgress,
-  Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableFooter,
   TableHead,
   TablePagination,
@@ -18,7 +17,6 @@ import { useUrl } from "../utils/hooks/useUrl";
 import { IApiResponse } from "../interfaces/ApiResponse";
 import { useEffect } from "react";
 import { InfoCard } from "./InfoCard";
-import { FilterIdInput } from "./FilterIdInput";
 import { useTableStore } from "../stores/tableStore";
 import { IApiResponseById } from "../interfaces/ApiResponseById";
 import { ensureArray } from "../utils/ensureArray";
@@ -54,52 +52,54 @@ const CustomTable = () => {
     }
   }, [data]);
 
-  if (!data) return <CircularProgress />;
+  if (!data)
+    return (
+      <Stack alignItems="center">
+        <CircularProgress />
+      </Stack>
+    );
   if (error) return <InfoCard />;
 
   return (
-    <TableContainer component={Paper}>
-      <FilterIdInput />
-      <Table>
-        <TableHead>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableHeadCell>id</TableHeadCell>
+          <TableHeadCell>name</TableHeadCell>
+          <TableHeadCell>year</TableHeadCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {"data" in data &&
+          ensureArray(data.data).map((item) => {
+            return (
+              <TableRow
+                sx={{
+                  backgroundColor: item.color,
+                }}
+                key={item.id}
+              >
+                <TableCell>{item.id}</TableCell>
+                <TableCell>{item.name}</TableCell>
+                <TableCell>{item.year}</TableCell>
+              </TableRow>
+            );
+          })}
+      </TableBody>
+      {"page" in data && (
+        <TableFooter>
           <TableRow>
-            <TableHeadCell>id</TableHeadCell>
-            <TableHeadCell>name</TableHeadCell>
-            <TableHeadCell>year</TableHeadCell>
+            <TablePagination
+              count={data.total}
+              page={data.page - 1}
+              onPageChange={handlePageChange}
+              rowsPerPageOptions={[-1]}
+              rowsPerPage={5}
+            />
           </TableRow>
-        </TableHead>
-        <TableBody>
-          {"data" in data &&
-            ensureArray(data.data).map((item) => {
-              return (
-                <TableRow
-                  sx={{
-                    backgroundColor: item.color,
-                  }}
-                  key={item.id}
-                >
-                  <TableCell>{item.id}</TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.year}</TableCell>
-                </TableRow>
-              );
-            })}
-        </TableBody>
-        {"page" in data && (
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                count={data.total}
-                page={data.page - 1}
-                onPageChange={handlePageChange}
-                rowsPerPageOptions={[-1]}
-                rowsPerPage={5}
-              />
-            </TableRow>
-          </TableFooter>
-        )}
-      </Table>
-    </TableContainer>
+        </TableFooter>
+      )}
+    </Table>
   );
 };
 
