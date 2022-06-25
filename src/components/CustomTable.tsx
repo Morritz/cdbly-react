@@ -20,6 +20,7 @@ import { InfoCard } from "./InfoCard";
 import { IApiResponseById } from "../interfaces/ApiResponseById";
 import { ensureArray } from "../utils/ensureArray";
 import { useQuery } from "../stores/queryStore";
+import { useDebouncedLoader } from "use-debounced-loader";
 
 const API_URL = "https://reqres.in/api/products";
 const ITEMS_PER_PAGE = 5;
@@ -33,6 +34,7 @@ const CustomTable = () => {
           `${API_URL}?per_page=${ITEMS_PER_PAGE}&page=${values.page}`,
           fetcher
         );
+  const debouncedIsLoading = useDebouncedLoader(!data, -1, 250);
 
   const handlePageChange = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -103,12 +105,13 @@ const CustomTable = () => {
       );
   };
 
-  if (!data)
+  if (debouncedIsLoading)
     return (
-      <Stack alignItems="center">
+      <Stack alignItems="center" sx={{ paddingY: 2 }}>
         <CircularProgress />
       </Stack>
     );
+
   return (
     <Table>
       <TableHead>
